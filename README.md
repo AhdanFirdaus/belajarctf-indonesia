@@ -66,8 +66,8 @@ Pastikan Anda telah menginstal **Node.js** (v18.17+ atau v20+ disarankan).
 
 ```bash
 # 1. Clone repositori
-git clone https://github.com/AhdanFirdaus/capture_the_flag.git
-cd capture_the_flag
+git clone https://github.com/AhdanFirdaus/belajarctf-indonesia.git
+cd belajarctf-indonesia
 
 # 2. Instal dependensi
 npm install
