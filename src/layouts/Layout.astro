@@ -1,0 +1,159 @@
+---
+import '../styles/global.css';
+import CursorGrid from '../components/CursorGrid.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : 'https://belajarctf.ahdanfirdaus.my.id';
+const currentPath = Astro.url.pathname;
+const canonicalUrl = `${siteUrl}${currentPath === '/' ? '' : currentPath}`;
+
+const {
+  title = "Panduan Belajar CTF Indonesia — Rute & Kurasi Tools Terlengkap",
+  description = "Direktori & rute belajar Capture The Flag (CTF) Indonesia terlengkap dari nol untuk pemula. Dilengkapi 9 tahapan belajar, kurasi tools forensik, web exploitation, reverse engineering, cryptography, pwn, dan arena playground.",
+  image = `${siteUrl}/logo.png`,
+} = Astro.props;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": "Panduan Belajar CTF Indonesia",
+      "description": description,
+      "publisher": {
+        "@type": "Person",
+        "name": "Ahdan Firdaus (Dadan)",
+        "url": "https://github.com/AhdanFirdaus",
+        "sameAs": [
+          "https://github.com/AhdanFirdaus",
+          "https://ahdanfirdaus.my.id"
+        ]
+      },
+      "inLanguage": "id-ID",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${siteUrl}/?q={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "LearningResource",
+      "@id": `${siteUrl}/#learningResource`,
+      "name": "Panduan Belajar CTF (Capture The Flag) untuk Pemula",
+      "description": "Kurasi materi, rute belajar 9 tahapan, serta ratusan tools digital forensics, web exploitation, crypto, reverse engineering, dan binary pwn.",
+      "learningResourceType": "Roadmap / Directory",
+      "educationalLevel": "Beginner to Advanced",
+      "inLanguage": "id",
+      "author": {
+        "@type": "Person",
+        "name": "Ahdan Firdaus"
+      }
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="id" class="scroll-smooth dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content="Ahdan Firdaus (Dadan)" />
+    <meta
+      name="keywords"
+      content="CTF Indonesia, panduan belajar CTF, capture the flag pemula, tools CTF, web exploitation, digital forensics, reverse engineering, cryptography, pwn binary exploitation, picoCTF, cyber security Indonesia, PortSwigger, CryptoHack, crackmes, CyberSecurityIPB, Ahdan Firdaus, belajar hacking legal"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Favicon & PWA App Icons -->
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="shortcut icon" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Theme & Color Scheme -->
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CTF Guide ID" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:secure_url" content={image} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Panduan Belajar CTF Indonesia" />
+    <meta property="og:site_name" content="Panduan Belajar CTF Indonesia" />
+    <meta property="og:locale" content="id_ID" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content="Panduan Belajar CTF Indonesia" />
+    <meta name="twitter:site" content="@AhdanFirdaus" />
+    <meta name="twitter:creator" content="@AhdanFirdaus" />
+
+    <!-- Generator -->
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+    <!-- Google Fonts: Pixelify Sans, Inter, JetBrains Mono (Non-render-blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Pixelify+Sans:wght@500;600;700&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Pixelify+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Pixelify+Sans:wght@500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+  </head>
+  <body class="bg-[#0a0a0a] text-white selection:bg-white selection:text-black relative antialiased min-h-screen">
+    <!-- Interactive Background Grid following cursor -->
+    <CursorGrid />
+
+    <!-- Main Content -->
+    <main id="main-content" class="relative z-10">
+      <slot />
+    </main>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://belajarctf.ahdanfirdaus.my.id/sitemap.xml

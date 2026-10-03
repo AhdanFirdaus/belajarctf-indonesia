@@ -1,0 +1,258 @@
+---
+---
+
+<canvas
+  id="cursor-grid-canvas"
+  class="fixed inset-0 pointer-events-none z-0 w-full h-full"
+  aria-hidden="true"
+></canvas>
+
+<script>
+  // Interactive 3D Embossed Cursor Grid Canvas (Extruded Voxels with Physics & Shadows)
+  const initCursorGrid = () => {
+    const canvas = document.getElementById('cursor-grid-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const CELL_SIZE = 24; // 24px grid
+    const MAX_OFFSET = 2; // Manhattan radius around cursor
+    const MAX_ELEVATION = 7; // Max pixels of 3D lift/nimbul
+
+    interface CellState {
+      alpha: number;      // Current opacity
+      targetAlpha: number;
+      elevation: number;  // Current 3D height in px (nimbul)
+      targetElev: number; // Target 3D height
+    }
+
+    // Map of active 3D cells: key = "col,row", value = CellState
+    const activeCells = new Map<string, CellState>();
+
+    let mouseX = -1000;
+    let mouseY = -1000;
+    let isMouseMoving = false;
+    let animFrameId: number | null = null;
+
+    const isMobileTouch =
+      window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // 1. Draw Subtle Base Grid Plane
+    const drawBaseGrid = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+
+      ctx.beginPath();
+      for (let x = 0; x <= canvas.width; x += CELL_SIZE) {
+        ctx.moveTo(x + 0.5, 0);
+        ctx.lineTo(x + 0.5, canvas.height);
+      }
+      for (let y = 0; y <= canvas.height; y += CELL_SIZE) {
+        ctx.moveTo(0, y + 0.5);
+        ctx.lineTo(canvas.width, y + 0.5);
+      }
+      ctx.stroke();
+    };
+
+    // If mobile/touch device, draw static background once and skip all heavy tracking loops
+    if (isMobileTouch) {
+      drawBaseGrid();
+      return;
+    }
+
+    const activateCellsAround = (x: number, y: number) => {
+      const centerCol = Math.floor(x / CELL_SIZE);
+      const centerRow = Math.floor(y / CELL_SIZE);
+
+        // Activate center cell with maximum 3D elevation
+        const centerKey = `${centerCol},${centerRow}`;
+        const existingCenter = activeCells.get(centerKey);
+        activeCells.set(centerKey, {
+          alpha: Math.max(existingCenter?.alpha || 0, 0.4),
+          targetAlpha: 0.4,
+          elevation: Math.max(existingCenter?.elevation || 0, MAX_ELEVATION),
+          targetElev: MAX_ELEVATION,
+        });
+
+        // Activate surrounding cells with progressive 3D height falloff & asymmetric dispersion
+        for (let dc = -MAX_OFFSET; dc <= MAX_OFFSET; dc++) {
+          for (let dr = -MAX_OFFSET; dr <= MAX_OFFSET; dr++) {
+            if (dc === 0 && dr === 0) continue;
+
+            const manhattanDist = Math.abs(dc) + Math.abs(dr);
+
+            if (manhattanDist <= 2) {
+              const col = centerCol + dc;
+              const row = centerRow + dr;
+              const key = `${col},${row}`;
+
+              const chance = manhattanDist === 1 ? 0.65 : 0.35;
+
+              if (Math.random() < chance) {
+                const targetAlpha = manhattanDist === 1 
+                  ? (0.18 + Math.random() * 0.15)
+                  : (0.08 + Math.random() * 0.1);
+                
+                const targetElev = manhattanDist === 1
+                  ? (MAX_ELEVATION * (0.6 + Math.random() * 0.3))
+                  : (MAX_ELEVATION * (0.3 + Math.random() * 0.25));
+
+                const existing = activeCells.get(key);
+                activeCells.set(key, {
+                  alpha: Math.max(existing?.alpha || 0, targetAlpha),
+                  targetAlpha: targetAlpha,
+                  elevation: Math.max(existing?.elevation || 0, targetElev),
+                  targetElev: targetElev,
+                });
+              }
+            }
+          }
+        }
+      };
+
+      const handleMouseMove = (e: MouseEvent) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        isMouseMoving = true;
+        activateCellsAround(mouseX, mouseY);
+        if (!animFrameId) {
+          animFrameId = requestAnimationFrame(render);
+        }
+      };
+
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+      const render = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Draw Subtle Base Grid Plane
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+
+        ctx.beginPath();
+        for (let x = 0; x <= canvas.width; x += CELL_SIZE) {
+          ctx.moveTo(x + 0.5, 0);
+          ctx.lineTo(x + 0.5, canvas.height);
+        }
+        for (let y = 0; y <= canvas.height; y += CELL_SIZE) {
+          ctx.moveTo(0, y + 0.5);
+          ctx.lineTo(canvas.width, y + 0.5);
+        }
+        ctx.stroke();
+
+        // 2. Draw 3D Embossed (Nimbul) Elevated Cells
+        if (activeCells.size > 0) {
+          activeCells.forEach((state, key) => {
+            const [colStr, rowStr] = key.split(',');
+            const col = parseInt(colStr, 10);
+            const row = parseInt(rowStr, 10);
+
+            const baseX = col * CELL_SIZE;
+            const baseY = row * CELL_SIZE;
+            const h = state.elevation; // 3D vertical lift
+            const alpha = Math.min(1, state.alpha);
+
+            // A. Ground Drop Shadow (gives clear floating depth from the floor)
+            if (h > 0.5) {
+              const shadowOffset = h * 0.6;
+              ctx.fillStyle = `rgba(0, 0, 0, ${(alpha * 0.65).toFixed(3)})`;
+              ctx.fillRect(
+                baseX + shadowOffset, 
+                baseY + shadowOffset, 
+                CELL_SIZE, 
+                CELL_SIZE
+              );
+            }
+
+            // B. 3D Extruded Front/Bottom Wall (Side depth)
+            if (h > 0.5) {
+              // Front Wall (Bottom face)
+              const wallGradient = ctx.createLinearGradient(
+                baseX, baseY + CELL_SIZE - h,
+                baseX, baseY + CELL_SIZE
+              );
+              wallGradient.addColorStop(0, `rgba(100, 100, 100, ${(alpha * 0.6).toFixed(3)})`);
+              wallGradient.addColorStop(1, `rgba(20, 20, 20, ${(alpha * 0.9).toFixed(3)})`);
+
+              ctx.fillStyle = wallGradient;
+              ctx.beginPath();
+              ctx.moveTo(baseX, baseY + CELL_SIZE - h);
+              ctx.lineTo(baseX + CELL_SIZE, baseY + CELL_SIZE - h);
+              ctx.lineTo(baseX + CELL_SIZE, baseY + CELL_SIZE);
+              ctx.lineTo(baseX, baseY + CELL_SIZE);
+              ctx.closePath();
+              ctx.fill();
+
+              // Side Edge Seam lines
+              ctx.strokeStyle = `rgba(255, 255, 255, ${(alpha * 0.25).toFixed(3)})`;
+              ctx.stroke();
+            }
+
+            // C. 3D Elevated Top Face (Raised Surface)
+            const topY = baseY - h;
+            
+            // Fill Top Face with subtle reflective gradient
+            const topGradient = ctx.createLinearGradient(
+              baseX, topY,
+              baseX + CELL_SIZE, topY + CELL_SIZE
+            );
+            topGradient.addColorStop(0, `rgba(255, 255, 255, ${(alpha * 0.85).toFixed(3)})`);
+            topGradient.addColorStop(0.5, `rgba(200, 200, 200, ${(alpha * 0.5).toFixed(3)})`);
+            topGradient.addColorStop(1, `rgba(120, 120, 120, ${(alpha * 0.35).toFixed(3)})`);
+
+            ctx.fillStyle = topGradient;
+            ctx.fillRect(baseX + 1, topY + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+
+            // D. Crisp 3D Bevel Highlights (Bright top & left rim, darker bottom & right rim)
+            // Top rim highlight (Light source from top-left)
+            ctx.strokeStyle = `rgba(255, 255, 255, ${(alpha * 1.5).toFixed(3)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(baseX + 0.5, topY + CELL_SIZE - 0.5);
+            ctx.lineTo(baseX + 0.5, topY + 0.5);
+            ctx.lineTo(baseX + CELL_SIZE - 0.5, topY + 0.5);
+            ctx.stroke();
+
+            // Bottom-right rim shadow
+            ctx.strokeStyle = `rgba(30, 30, 30, ${(alpha * 0.9).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.moveTo(baseX + CELL_SIZE - 0.5, topY + 0.5);
+            ctx.lineTo(baseX + CELL_SIZE - 0.5, topY + CELL_SIZE - 0.5);
+            ctx.lineTo(baseX + 0.5, topY + CELL_SIZE - 0.5);
+            ctx.stroke();
+
+            // Decay physics (smooth settling back down)
+            state.alpha *= 0.88;
+            state.elevation *= 0.85;
+
+            if (state.alpha < 0.005 || state.elevation < 0.1) {
+              activeCells.delete(key);
+            }
+          });
+        }
+
+        // Keep loop running until all 3D blocks settle down
+        if (activeCells.size > 0 || isMouseMoving) {
+          isMouseMoving = false;
+          animFrameId = requestAnimationFrame(render);
+        } else {
+          animFrameId = null;
+        }
+      };
+
+      // Initial render of base grid
+      render();
+    };
+
+    initCursorGrid();
+  </script>

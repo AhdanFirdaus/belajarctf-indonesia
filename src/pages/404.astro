@@ -1,0 +1,244 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="404 — Halaman Belum Tersedia | Panduan Belajar CTF"
+  description="Halaman yang Anda tuju belum tersedia. Tenang, seluruh rute belajar dan tools CTF tetap aman di beranda."
+>
+  <div class="min-h-screen flex items-center justify-center p-4 relative z-10">
+    <!-- Centered Card with exact #101011 background & Game Over Pop-Up Shake -->
+    <div
+      id="error-card"
+      class="game-over-entry w-full max-w-md md:max-w-2xl lg:max-w-3xl border border-neutral-800 bg-[#101011] p-6 sm:p-8 md:p-10 shadow-2xl transition-all flex flex-col md:flex-row items-center gap-6 md:gap-10 text-center md:text-left"
+    >
+      <!-- 404 Icon (Desktop Left, Mobile Center Top) -->
+      <div class="flex items-center justify-center flex-shrink-0">
+        <img
+          src="/404.png"
+          alt="404 Not Found"
+          width="240"
+          height="240"
+          class="w-36 h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 object-contain select-none drop-shadow-md"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Text & Actions Content (Desktop Right, Mobile Center Below) -->
+      <div class="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
+        <!-- Chill & Professional Status Tag -->
+        <span
+          class="inline-block text-[11px] font-mono tracking-widest text-neutral-400 bg-[#171719] border border-neutral-800 px-3 py-1 uppercase mb-3"
+        >
+          SEPERTINYA TERSESAT
+        </span>
+
+        <!-- Heading -->
+        <h1
+          class="text-2xl sm:text-3xl font-pixel text-white uppercase tracking-wide mb-3 leading-snug"
+        >
+          HALAMAN BELUM TERSEDIA
+        </h1>
+
+        <!-- Chill yet Professional Description -->
+        <p
+          class="text-sm text-neutral-400 font-normal leading-relaxed mb-6 max-w-md"
+        >
+          Santai, rute belajarnya tidak hilang. URL yang Anda tuju mungkin salah
+          ketik atau belum terdaftar di direktori ini.
+        </p>
+
+        <!-- Action Button -->
+        <a
+          id="home-btn"
+          href="/"
+          class="inline-flex items-center justify-center border border-white bg-white text-black px-6 py-2.5 text-xs font-mono uppercase tracking-wider font-bold hover:bg-neutral-200 transition-colors w-full sm:w-auto cursor-pointer"
+        >
+          <span>← Kembali ke Beranda</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes gameOverPopShake {
+      0% {
+        opacity: 0;
+        transform: scale(0.86) translateY(20px);
+      }
+      32% {
+        opacity: 1;
+        transform: scale(1.04) translateY(-2px);
+      }
+      48% {
+        transform: scale(1) translateX(-6px) rotate(-1deg);
+      }
+      62% {
+        transform: scale(1) translateX(5px) rotate(0.8deg);
+      }
+      76% {
+        transform: scale(1) translateX(-3px) rotate(-0.4deg);
+      }
+      88% {
+        transform: scale(1) translateX(2px) rotate(0.2deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateX(0) rotate(0);
+      }
+    }
+
+    @keyframes retroShake {
+      0% { transform: translate(0, 0) scale(1); }
+      20% { transform: translate(-5px, 2px) rotate(-0.8deg) scale(0.99); }
+      40% { transform: translate(5px, -2px) rotate(0.8deg) scale(1.01); }
+      60% { transform: translate(-3px, 1px) rotate(-0.4deg); }
+      80% { transform: translate(2px, -1px) rotate(0.4deg); }
+      100% { transform: translate(0, 0) rotate(0) scale(1); }
+    }
+
+    .game-over-entry {
+      animation: gameOverPopShake 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    .card-shake {
+      animation: retroShake 0.4s ease-in-out;
+    }
+  </style>
+
+  <!-- Retro RPG Defeat Sound Synthesizer Script -->
+  <script>
+    let audioCtx: AudioContext | null = null;
+
+    const triggerCardShake = () => {
+      const card = document.getElementById("error-card");
+      if (card) {
+        card.classList.remove("card-shake");
+        void card.offsetWidth; // Trigger reflow
+        card.classList.add("card-shake");
+      }
+    };
+
+    const playRpgDefeatSound = () => {
+      try {
+        const AudioContextClass =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext })
+            .webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        if (!audioCtx) {
+          audioCtx = new AudioContextClass();
+        }
+
+        const triggerSynthesis = () => {
+          if (!audioCtx) return;
+          const now = audioCtx.currentTime;
+
+          // 4 descending sad minor notes: E4 (329.63Hz) -> C4 (261.63Hz) -> G#3 (207.65Hz) -> F3 (174.61Hz)
+          const notes = [
+            { freq: 329.63, start: 0, dur: 0.14 },
+            { freq: 261.63, start: 0.15, dur: 0.14 },
+            { freq: 207.65, start: 0.3, dur: 0.16 },
+            { freq: 174.61, start: 0.47, dur: 0.45 },
+          ];
+
+          notes.forEach((n) => {
+            if (!audioCtx) return;
+
+            // Main retro oscillator (triangle wave)
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+
+            osc1.type = "triangle";
+            osc1.frequency.setValueAtTime(n.freq, now + n.start);
+
+            // Retro pulse sub-oscillator for crunch
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+
+            osc2.type = "square";
+            osc2.frequency.setValueAtTime(n.freq / 2, now + n.start);
+
+            // Sad Game Over slide down on final note
+            if (n.freq < 200) {
+              osc1.frequency.exponentialRampToValueAtTime(
+                n.freq * 0.82,
+                now + n.start + n.dur,
+              );
+              osc2.frequency.exponentialRampToValueAtTime(
+                (n.freq / 2) * 0.82,
+                now + n.start + n.dur,
+              );
+            }
+
+            gain1.gain.setValueAtTime(0.24, now + n.start);
+            gain1.gain.exponentialRampToValueAtTime(
+              0.001,
+              now + n.start + n.dur,
+            );
+
+            gain2.gain.setValueAtTime(0.08, now + n.start);
+            gain2.gain.exponentialRampToValueAtTime(
+              0.001,
+              now + n.start + n.dur,
+            );
+
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+
+            osc1.start(now + n.start);
+            osc1.stop(now + n.start + n.dur);
+
+            osc2.start(now + n.start);
+            osc2.stop(now + n.start + n.dur);
+          });
+        };
+
+        if (audioCtx.state === "suspended") {
+          audioCtx
+            .resume()
+            .then(() => {
+              triggerSynthesis();
+            })
+            .catch(() => {});
+        } else {
+          triggerSynthesis();
+        }
+      } catch (e) {
+        console.debug("Audio error:", e);
+      }
+    };
+
+    // 1. Trigger immediately on route access / page load / refresh
+    playRpgDefeatSound();
+    document.addEventListener("DOMContentLoaded", playRpgDefeatSound);
+    window.addEventListener("load", playRpgDefeatSound);
+
+    // 2. Trigger on initial browser activity if autoplay is initially blocked by browser policy
+    const initialEvents = ["mousemove", "touchstart", "keydown", "scroll", "focus"];
+    const onInitialActivity = () => {
+      playRpgDefeatSound();
+      initialEvents.forEach((evt) =>
+        window.removeEventListener(evt, onInitialActivity)
+      );
+    };
+    initialEvents.forEach((evt) => {
+      window.addEventListener(evt, onInitialActivity, {
+        passive: true,
+        once: true,
+      });
+    });
+
+    // 3. Trigger sound & card shake on EVERY user click anywhere on the 404 page
+    window.addEventListener("click", () => {
+      playRpgDefeatSound();
+      triggerCardShake();
+    });
+  </script>
+</Layout>
