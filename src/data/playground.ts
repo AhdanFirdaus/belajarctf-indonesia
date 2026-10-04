@@ -145,6 +145,17 @@ export const ctfPlatforms: PlatformItem[] = [
 
   // ==================== PWN / BINARY EXPLOITATION PLAYGROUNDS ====================
   {
+    id: 'rop-emporium',
+    name: 'ROP Emporium',
+    type: 'WARGAME',
+    difficulty: 'MENENGAH',
+    description: 'Platform tantangan bertingkat untuk mempelajari dan melatih teknik Return-Oriented Programming (ROP) pada binary exploitation arsitektur x86 dan x64.',
+    highlight: 'Kuasai pembuatan ROP chain, ret2win, rop gadgets, dan bypass proteksi biner secara bertahap.',
+    url: 'https://ropemporium.com/',
+    tags: ['pwn', 'rop', 'binary-exploitation', 'wargame', 'x86-x64', 'rop-gadgets'],
+    free: true,
+  },
+  {
     id: 'pwnable-tw',
     name: 'pwnable.tw',
     type: 'WARGAME',

@@ -926,6 +926,28 @@ export const resources: ResourceItem[] = [
     tags: ['pwn', 'binary-exploitation', 'buffer-overflow', 'rop', 'heap', 'gitbook'],
     recommended: true,
   },
+  {
+    id: 'nightmare-pwn',
+    title: 'Nightmare',
+    category: 'pwn',
+    categoryLabel: 'Pwn / Binary Exploitation',
+    role: 'pwn',
+    description: 'Repositori kursus komprehensif untuk belajar reverse engineering dan binary exploitation praktis berbasis tantangan CTF nyata.',
+    url: 'https://github.com/guyinatuxedo/nightmare',
+    tags: ['pwn', 'binary-exploitation', 'reverse', 'kursus', 'github', 'ctf-challenges'],
+    recommended: true,
+  },
+  {
+    id: 'crypto-cat-resources',
+    title: 'Crypto-Cat',
+    category: 'pwn',
+    categoryLabel: 'Pwn / Binary Exploitation',
+    role: 'pwn',
+    description: 'Kumpulan repositori, panduan, materi, dan skrip latihan CTF untuk berbagai kategori seperti PWN, Binary Exploitation, dan Kriptografi.',
+    url: 'https://github.com/Crypto-Cat',
+    tags: ['pwn', 'binary-exploitation', 'crypto', 'ctf-guides', 'scripts', 'github'],
+    recommended: true,
+  },
 
   // ==================== TOOLS: MISCELLANEOUS ====================
   {
