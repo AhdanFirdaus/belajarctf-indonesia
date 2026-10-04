@@ -291,24 +291,15 @@ export const AppExplorer: React.FC<AppExplorerProps> = ({ initialResources }) =>
 
               {/* Progressive DOM Loading Controls */}
               {filteredResources.length > displayedResources.length && (
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-8 pt-6 border-t border-neutral-900">
+                <div className="flex items-center justify-center mt-8 pt-6 border-t border-neutral-900">
                   <button
                     onClick={() => {
                       playRetroClick();
                       setDisplayLimit((prev) => prev + PAGE_SIZE);
                     }}
-                    className="border border-neutral-700 bg-[#121212] text-white px-5 py-2.5 text-xs font-mono uppercase tracking-wider hover:border-white hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+                    className="border border-neutral-700 bg-[#121212] text-white px-6 py-2.5 text-xs font-mono uppercase tracking-wider hover:border-white hover:bg-[#1a1a1a] transition-colors cursor-pointer"
                   >
                     + Muat Lebih Banyak ({filteredResources.length - displayedResources.length} item lagi)
-                  </button>
-                  <button
-                    onClick={() => {
-                      playRetroClick();
-                      setDisplayLimit(filteredResources.length);
-                    }}
-                    className="border border-neutral-800 bg-[#0a0a0a] text-neutral-400 px-4 py-2.5 text-xs font-mono uppercase tracking-wider hover:border-neutral-600 hover:text-white transition-colors cursor-pointer"
-                  >
-                    Tampilkan Semua ({filteredResources.length})
                   </button>
                 </div>
               )}
