@@ -595,6 +595,17 @@ export const resources: ResourceItem[] = [
     tags: ['forensic', 'virustotal', 'malware-scan', 'antivirus', 'threat-intel'],
     recommended: true,
   },
+  {
+    id: 'eric-zimmerman-tools',
+    title: "Eric Zimmerman's Tools",
+    category: 'forensic',
+    categoryLabel: 'Forensics',
+    role: 'forensic',
+    description: 'Koleksi tool digital forensics Windows open-source populer (Registry Explorer, MFTECmd, ShellBags, PECmd, EvtxECmd, KAPE, dll) untuk analisis artefak sistem.',
+    url: 'https://ericzimmerman.github.io',
+    tags: ['forensic', 'windows-forensics', 'dfir', 'registry-explorer', 'kape', 'mft', 'evtx', 'artifacts'],
+    recommended: true,
+  },
 
   // ==================== TOOLS: REVERSE ENGINEERING ====================
   {
