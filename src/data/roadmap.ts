@@ -4,7 +4,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-linux',
     stepNumber: 1,
-    phase: 'TAHAP 01: PONDASI SISTEM OPERASI',
+    phase: 'PONDASI SISTEM OPERASI',
     title: 'Dasar Sistem Linux & Penguasaan Terminal',
     level: 'PEMULA',
     description: 'Pondasi wajib sebelum memulai CTF. Pelajari sistem operasi Linux, navigasi folder terminal, manipulasi berkas, dan izin file chmod dari nol.',
@@ -20,7 +20,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-cybersecurity-ipb',
     stepNumber: 2,
-    phase: 'TAHAP 02: PENGENALAN CYBER SECURITY & CTF',
+    phase: 'PENGENALAN CYBER SECURITY & CTF',
     title: 'Edukasi & Konsep Cybersecurity (CyberSecurityIPB)',
     level: 'PEMULA',
     description: 'Tonton materi video edukasi, sharing session, dan webinar cybersecurity berbahasa Indonesia dari komunitas CyberSecurityIPB untuk membangun mindset keamanan siber.',
@@ -36,7 +36,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-picoctf',
     stepNumber: 3,
-    phase: 'TAHAP 03: ARENA LATIHAN PEMULA',
+    phase: 'ARENA LATIHAN PEMULA',
     title: 'Flag Pertama & General Skills (picoCTF)',
     level: 'PEMULA',
     description: 'Masuk ke arena wargame ramah pemula picoCTF. Selesaikan tantangan General Skills untuk memahami format flag picoCTF{...}, konversi biner/hex/base64, dan koneksi netcat.',
@@ -52,7 +52,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-forensics',
     stepNumber: 4,
-    phase: 'TAHAP 04: INVESTIGASI FORENSIK',
+    phase: 'INVESTIGASI FORENSIK',
     title: 'Digital Forensics & Steganografi (CyberDefenders / TryHackMe)',
     level: 'MENENGAH',
     description: 'Pelajari cara menemukan berkas tersembunyi (steganografi gambar/audio), menganalisis rekaman paket jaringan (Wireshark/pcap), dan menyelesaikan investigasi tantangan blue team.',
@@ -68,7 +68,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-web-exploit',
     stepNumber: 5,
-    phase: 'TAHAP 05: EKSPLOITASI APLIKASI WEB',
+    phase: 'EKSPLOITASI APLIKASI WEB',
     title: 'Web Exploitation (PortSwigger Web Security Academy)',
     level: 'MENENGAH',
     description: 'Pahami cara kerja arsitektur web dan eksploitasi kerentanan umum seperti SQL Injection, Cross-Site Scripting (XSS), CSRF, SSRF, dan bypass autentikasi.',
@@ -84,7 +84,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-crypto',
     stepNumber: 6,
-    phase: 'TAHAP 06: PEMROGRAMAN & MATEMATIKA CIPHER',
+    phase: 'PEMROGRAMAN & MATEMATIKA CIPHER',
     title: 'Kriptografi Modern & Klasik (CryptoHack)',
     level: 'MENENGAH',
     description: 'Pecahkan teka-teki sandi kriptografi mulai dari manipulasi bitwise XOR, sandi substitusi, matematika modular, hingga algoritma modern RSA dan AES.',
@@ -100,7 +100,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-reverse',
     stepNumber: 7,
-    phase: 'TAHAP 07: DEKOMPILASI & REVERSING BINER',
+    phase: 'DEKOMPILASI & REVERSING BINER',
     title: 'Reverse Engineering & Binary Analysis (crackmes.one)',
     level: 'LANJUTAN',
     description: 'Pelajari cara membongkar kode biner executable (ELF/PE) menggunakan disassembler Ghidra/IDA Pro dan selesaikan tantangan crackme di crackmes.one.',
@@ -116,7 +116,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-pwn',
     stepNumber: 8,
-    phase: 'TAHAP 08: EKSPLOITASI MEMORI & PWN',
+    phase: 'EKSPLOITASI MEMORI & PWN',
     title: 'Pwn / Binary Exploitation (ir0nstone Notes)',
     level: 'LANJUTAN',
     description: 'Pelajari konsep eksploitasi memori tingkat lanjut mulai dari Buffer Overflow, kontrol register EIP/RIP, Ret2win, ROP Chains, hingga tantangan binary di pwnable.tw.',
@@ -132,7 +132,7 @@ export const roadmapSteps: RoadmapStep[] = [
   {
     id: 'step-competition',
     stepNumber: 9,
-    phase: 'TAHAP 09: KOMPETISI & PENGEMBANGAN DIRI',
+    phase: 'KOMPETISI & PENGEMBANGAN DIRI',
     title: 'Terjun Kompetisi CTF & Riset Writeup (CTFtime)',
     level: 'LANJUTAN',
     description: 'Bentuk tim atau main solo di kompetisi CTF resmi. Jangan takut kalah, pantau jadwal turnamen di CTFtime dan selalu pelajari writeup pasca-kompetisi.',
